@@ -2,7 +2,7 @@ class Square {
   int cellSize;
   PVector position;
   boolean isActive;
-  color col = color(random(255), random(255), random(255));;
+  color col = color(random(255), random(255), random(255));
   
   Square(int _cellSize, PVector _position){
     cellSize = _cellSize; 
