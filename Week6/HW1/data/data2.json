@@ -1,0 +1,39 @@
+{
+    "scenes": [
+        {
+            "description": "White",
+            "options": ["Add red", "Add green", "Add blue"],
+            "optionTargets": [1, 2, 3],
+        },
+        {
+            "description": "Red",
+            "options": ["Remove red", "Add green", "Add blue"],
+            "optionTargets": [0, 5, 4],
+        },
+        {
+            "description": "Green",
+            "options": ["Remove green", "Add red", "Add blue"],
+            "optionTargets": [0, 5, 6],
+        },
+        {
+            "description": "Blue",
+            "options": ["Remove blue", "Add red", "Add green"],
+            "optionTargets": [0, 4, 6],
+        },
+        {
+            "description": "Magenta",
+            "options": ["Remove red", "Remove blue", "Add yellow and cyan"],
+            "optionTargets": [3, 1, 0],
+        },
+        {
+            "description": "Yellow",
+            "options": ["Remove red", "Remove green", "Add magenta and cyan"],
+            "optionTargets": [2, 1, 0],
+        },
+        {
+            "description": "Cyan",
+            "options": ["Remove green", "Remove blue", "Add yellow and magenta"],
+            "optionTargets": [3, 2, 0],
+        },
+    ]
+}

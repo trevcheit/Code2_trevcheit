@@ -1,0 +1,38 @@
+{
+  "descriptions": [
+    "White",
+    "Red",
+    "Green",
+    "Blue",
+    "Magenta",
+    "Yellow",
+    "Cyan"
+  ],
+  "options": [
+    ["Add red", "Add green", "Add blue"],
+    ["Remove red", "Add green", "Add blue"],
+    ["Remove green", "Add red", "Add blue"],
+    ["Remove blue", "Add red", "Add green"],
+    ["Remove red", "Remove blue", "Add yellow and cyan"],
+    ["Remove red", "Remove green", "Add yellow and cyan"],
+    ["Remove green", "Remove blue", "Add yellow and cyan"] 
+  ],
+  "optionTargets": [
+    [1, 2, 3],
+    [0, 5, 4],
+    [0, 5, 6],
+    [0, 4, 6],
+    [3, 1, 0],
+    [2, 1, 0],
+    [3, 2, 0]
+  ],
+  "bgColors": [
+    [255, 255, 255],
+    [208, 2, 27],
+    [126, 211, 33],
+    [74, 144, 226],
+    [189, 16, 224],
+    [248, 231, 28],
+    [80, 227, 194]
+  ]
+}
