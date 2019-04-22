@@ -89,6 +89,19 @@ class Blob {
     translate(width/2, height/2, wallPos);
     ellipse(0, 0, radius, radius);
     radius += growth;
+    
+    //translate(width/2, height/2, wallPos);
+    //beginShape();
+    //float xoff = 0;
+    //for (int i = 0; i < TWO_PI; i += 0.1){
+    //  float offset = map(noise(xoff), 0, 1, -25, 25);
+    //  float r = radius + offset;
+    //  float x = r * cos(i);
+    //  float y = r * sin(i);
+    //  vertex(x, y);
+    //  xoff += 0.1;
+    //}
+    //endShape();
     popMatrix();
   }
 }
