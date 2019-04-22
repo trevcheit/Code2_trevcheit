@@ -27,7 +27,7 @@ void draw() {
       case 0:
         break;
       case 1:
-        PVector bottomForce = new PVector(bottomLev[i].pos.x, bottomLev[i].pos.y);
+        PVector bottomForce = new PVector(width/2, height);
         PVector topForce = new PVector(topLev[i].pos.x, topLev[i].pos.y);
         
         //WANT THE BALL TO LEVITATE IN THE MIDDLE OF THE SCREEN
@@ -37,14 +37,15 @@ void draw() {
         
         float bottomDistance = bottomForce.mag();
         //float topDistance = topForce.mag();
-        if(bottomDistance < height/2){
+        if(bottomDistance < 100){
           bottomForce.normalize();
-          bottomForce.mult(-.1);
+          bottomForce.mult(-0.1);
+          bottomForce.x = 0;
           balls[i].applyForce(bottomForce);
         } else if(bottomDistance > height/2) {
-          topForce.normalize();
-          topForce.mult(-.1);
-          balls[i].applyForce(topForce);
+          //topForce.normalize();
+          //topForce.mult(-.1);
+          //balls[i].applyForce(topForce);
         }
         break;
     }
