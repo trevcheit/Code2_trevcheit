@@ -1,11 +1,12 @@
-//SCENE 1: START MENU
-//SCENE 2: GAME OPTIONS MENU
-  //SETUP 1: POWERUP SPAWN RATE INCREASED
-  //SETUP 2: PADDLE EXPANDS (UP TO 1.5X) WHEN BALLS ARE ADDED
-  //SETUP 3: LENGTH OF POWERUPS INCREASED (BUT SPAWN RATE DECREASED?)
-  //SETUP 4: PERMANENT POINTERS
-  //SETUP 5: START WITH EXTRA LIVES
-//SCENE 3: GAME
+//SCENE 0: START MENU
+//SCENE 1: GAME OPTIONS MENU
+  //PRESET 0: NORMAL
+  //PRESET 1: POWERUP SPAWN RATE INCREASED
+  //PRESET 2: LENGTH OF POWERUPS INCREASED (BUT SPAWN RATE DECREASED?)
+  //PRESET 3: PADDLE EXPANDS (UP TO 1.5X) WHEN BALLS ARE ADDED
+  //PRESET 4: PERMANENT POINTERS
+  //PRESET 5: START WITH EXTRA LIVES
+//SCENE 2: GAME
   //STATE 3A: COUNTDOWN TIMER
   //STATE 3B: GAME
   //STATE 3B-1: SCORE MULTIPLIER POWERUP
@@ -15,109 +16,150 @@
   //STATE 3B-5: WIND
   //STATE 3B-6: HIGH GRAVITY
   //OTHER HAZARDS
-//SCENE 4: GAME OVER SCREEN
+//SCENE 3: GAME OVER SCREEN
   //DATA DISPLAYED: SCORE, HIGHEST STREAK, HIGHEST BOUNCE, TOTAL BOUNCES(?)
   //DATA STORED: HIGH SCORE, BEST STREAK
 
-var scene;
-var setup;
+var scene = 0;
+var preset = 0;
 
 var balls = [];
 var paddle;
 var powerups = [];
+var powerupDropOdds;
 
 var streak = 0;
 var score = 0;
 
 //CAN BE CHANGED VIA STATE
 var lives;
-var powerupDropOdds;
+var dropOdds;
 var scoreMultiplier;
 var paddleWidth;
 var ballGravity;
+var powerupLength;
 
 function setup() {
   createCanvas(600, 1000);
 
-  paddle = new Paddle();
+  //PRESET
+  if(preset == 0){
+    lives = 10;
+    dropOdds = 50;
+    scoreMultiplier = 1;
+    paddleWidth = 200;
+    ballGravity = .4;
+    powerupLength = 15;
+  }
+  if(preset == 1){
+    lives = 10;
+    dropOdds = 25;
+    scoreMultiplier = 1;
+    paddleWidth = 200;
+    ballGravity = .4;
+    powerupLength = 15;
+  }
+  if(preset == 2){
+    lives = 10;
+    dropOdds = 50;
+    scoreMultiplier = 1;
+    paddleWidth = 200;
+    ballGravity = .4;
+    powerupLength = 30;
+  }
 
-  //SETUP
-  lives = 10;
-  powerupDropOdds = int(random(50));
-  scoreMultiplier = 1;
-  paddleWidth = 200;
-  ballGravity = .4;
+  if(scene == 2){
+    paddle = new Paddle();
+  }
 }
 
 function draw() {
   background(255, 247, 238);
 
-  paddle.display();
-  text("Lives: " + lives, 20, height-80);
-  text("Streak: " + streak, 20, height-100);
-  text("Score: " + score, 20, height-120);
+  if(scene == 2){
+    paddle.display();
+    text("Lives: " + lives, 20, height-80);
+    text("Streak: " + streak, 20, height-100);
+    text("Score: " + score, 20, height-120);
 
-  for (var i = 0; i < balls.length; i++){
-    balls[i].update();
-    balls[i].display();
+    for (var i = 0; i < balls.length; i++){
+      balls[i].update();
+      balls[i].display();
 
-    if(collideRectCircle(mouseX-paddleWidth/2, paddle.y-paddle.h/2, paddleWidth, paddle.h, balls[i].position.x, balls[i].position.y, balls[i].size)){
-      balls[i].bounce();
-      streak++;
+      if(collideRectCircle(mouseX-paddleWidth/2, paddle.y-paddle.h/2, paddleWidth, paddle.h, balls[i].position.x, balls[i].position.y, balls[i].size)){
+        balls[i].bounce();
+        streak++;
 
-      if(balls.length == 1){
-        score += 1*scoreMultiplier;
-        if(streak == 5){
-          balls.push(new Ball());
+        if(balls.length == 1){
+          score += 1*scoreMultiplier;
+          if(streak == 5){
+            balls.push(new Ball());
+          }
+        }
+        if(balls.length == 2){
+          score += 2*scoreMultiplier;
+          if(streak == 16){
+            balls.push(new Ball());
+          }
+        }
+        if(balls.length == 3){
+          score += 4*scoreMultiplier;
+          if(streak == 32){
+            balls.push(new Ball());
+          }
+        }
+        if(balls.length == 4){
+          score += 8*scoreMultiplier;
+          if(streak == 50){
+            balls.push(new Ball());
+          }
+        }
+        if(balls.length == 5){
+          score += 16*scoreMultiplier;
+        }
+
+        powerupDropOdds = int(random(dropOdds));
+        if(powerupDropOdds == 1){
+          powerups.push(new Powerup());
         }
       }
-      if(balls.length == 2){
-        score += 2*scoreMultiplier;
-        if(streak == 16){
-          balls.push(new Ball());
-        }
-      }
-      if(balls.length == 3){
-        score += 4*scoreMultiplier;
-        if(streak == 32){
-          balls.push(new Ball());
-        }
-      }
-      if(balls.length == 4){
-        score += 8*scoreMultiplier;
-        if(streak == 50){
-          balls.push(new Ball());
-        }
-      }
-      if(balls.length == 5){
-        score += 16*scoreMultiplier;
-      }
 
-      if(powerupDropOdds == 1){
-        powerups.push(new Powerup());
+      if(balls[i].position.y > height){
+        balls.splice(i, 1);
+        streak = 0;
+        if(lives > 0){
+          lives--;
+        }
       }
     }
 
-    if(balls[i].position.y > height){
-      balls.splice(i, 1);
-      streak = 0;
-      if(lives > 0){
-        lives--;
+    for(var i = 0; i < powerups.length; i++){
+      powerups[i].update();
+      powerups[i].display();
+
+      if(collideRectCircle(mouseX-paddleWidth/2, paddle.y-paddle.h/2, paddleWidth, paddle.h, powerups[i].position.x, powerups[i].position.y, powerups[i].size)){
+        if(powerups[i].type < 6){
+          lives++;
+        }
+        else if(powerups[i].type == 6){
+          paddle.extend();
+        }
+        // else if(powerups[i].type == 7){
+        //   balls.lowGrav();
+        // }
+        // else if(powerups[i].type == 8){
+        //   balls.pointer();
+        // }
+        else if(powerups[i].type == 9){
+          scoreMultiplier *= 2;
+        }
+
+        powerups.splice(i, 1);
       }
-    }
-  }
 
-  for(var i = 0; i < powerups.length; i++){
-    powerups[i].update();
-    powerups[i].display();
-
-    if(collideRectCircle(mouseX-paddleWidth/2, paddle.y-paddle.h/2, paddleWidth, paddle.h, powerups[i].position.x, powerups[i].position.y, powerups[i].size)){
-      powerups.splice(i, 1);
-
-      //NOT WORKING
-      // if(powerups[i].col == powerups[i].plusOneLife){
-      //   lives++;
-      // }
+      else if(powerups[i].position.y > height){
+        powerups.splice(i, 1);
+      }
     }
   }
 }
@@ -241,6 +283,10 @@ class Ball {
     ellipse(this.position.x, this.mouthY, this.size/this.mouthSize, this.size/this.mouthSize);
   }
 
+  lowGrav() {
+    ballGravity = .2;
+  }
+
 }
 
 class Paddle {
@@ -258,6 +304,10 @@ class Paddle {
     rect(mouseX, this.y, paddleWidth, this.h);
   }
 
+  extend() {
+    paddleWidth = 400;
+  }
+
 }
 
 class Powerup {
@@ -266,8 +316,9 @@ class Powerup {
     var paddleExtender = color(126, 211, 33);
     var lowGravity = color(74, 144, 226);
     var ballPointer = color(245, 166, 35);
+    var scoreMult = color(230, 38, 211)
 
-    this.type = int(random(1, 9));
+    this.type = int(random(10));
     this.position = new createVector(width/2, 100);
     this.velocity = new createVector(random(-5,5), random(1,5));
     this.gravity = new createVector(0, .1);
@@ -281,6 +332,8 @@ class Powerup {
       this.col = lowGravity;
     }else if(this.type == 8){
       this.col = ballPointer;
+    }else if(this.type == 9){
+      this.col = scoreMult;
     }
   }
 
